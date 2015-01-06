@@ -21,7 +21,7 @@
 #
 
 RUNNAME = test                        #MAKERUNDIR modifies this (magic comment, don't modify!)
-#RUNNAME = makeTest
+
 WORK = $(HOME)/tmp/arcpic/$(RUNNAME)/ #MAKERUNDIR modifies this (magic comment, don't modify!)
 
 OBJECTS =	init.o \

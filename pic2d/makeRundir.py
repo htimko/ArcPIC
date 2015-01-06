@@ -89,7 +89,8 @@ def copyFolderContents(srcFolder, targetFolder):
         else:
             shutil.copy2(srcname,targetname)
 
-copyFolderContents(anaScriptsFolder, os.path.join(newpath, "GLEanalysis"))
+# COMMENT OUT FOR NOW
+# copyFolderContents(anaScriptsFolder, os.path.join(newpath, "GLEanalysis"))
 
 #Chmod every file which has a hasbang to u+x
 for name in os.listdir(os.path.join(newpath, "GLEanalysis")):
@@ -105,25 +106,25 @@ for name in os.listdir(os.path.join(newpath, "GLEanalysis")):
 
     os.chmod(fn, os.stat(fn).st_mode | stat.S_IXUSR)
 
-copyFolderContents(anaSupportFolder, os.path.join(newpath, "GLEanalysis"))
+#copyFolderContents(anaSupportFolder, os.path.join(newpath, "GLEanalysis"))
 
 #Make a SVN status log
-print "Making SVN status log..."
-svnlog = open(os.path.join(newpath, "SVNstatus.txt"), 'w');
-svnlog.write("SVN log created by makerundir at " + str(datetime.datetime.now()) + "\n")
-svnlog.write("Output from 'svn info':\n")
-svnlog.write("#########################################\n")
-svnlog.flush()
-subprocess.call(["svn", "info"], stdout=svnlog, stderr=subprocess.STDOUT)
-svnlog.write("Output from 'svnversion':\n")
-svnlog.write("#########################################\n")
-svnlog.flush()
-subprocess.call(["svnversion"], stdout=svnlog, stderr=subprocess.STDOUT)
-svnlog.write("#########################################\n")
-svnlog.write("Output from 'svn diff':\n")
-svnlog.write("#########################################\n")
-svnlog.flush()
-subprocess.call(["svn", "diff"], stdout=svnlog, stderr=subprocess.STDOUT)
-svnlog.write("#########################################\n")
+#print "Making SVN status log..."
+#svnlog = open(os.path.join(newpath, "SVNstatus.txt"), 'w');
+#svnlog.write("SVN log created by makerundir at " + str(datetime.datetime.now()) + "\n")
+#svnlog.write("Output from 'svn info':\n")
+#svnlog.write("#########################################\n")
+#svnlog.flush()
+#subprocess.call(["svn", "info"], stdout=svnlog, stderr=subprocess.STDOUT)
+#svnlog.write("Output from 'svnversion':\n")
+#svnlog.write("#########################################\n")
+#svnlog.flush()
+#subprocess.call(["svnversion"], stdout=svnlog, stderr=subprocess.STDOUT)
+#svnlog.write("#########################################\n")
+#svnlog.write("Output from 'svn diff':\n")
+#svnlog.write("#########################################\n")
+#svnlog.flush()
+#subprocess.call(["svn", "diff"], stdout=svnlog, stderr=subprocess.STDOUT)
+#svnlog.write("#########################################\n")
 
 print "Installed ArcPic in \"" + newpath + "\""
