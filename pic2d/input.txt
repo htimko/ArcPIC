@@ -1,0 +1,231 @@
+*************************************************************
+***            INPUT FILE FOR 2D ARC-PIC CODE             ***
+*** (C) CERN and Helsinki Institute of Physics, 2010-2014 ***
+***                                                       ***
+*** This software is distributed under the terms of the   ***
+*** GNU General Public License version 3 (GPL Version 3), ***
+*** copied verbatim in the file LICENCE.md.               ***
+*** In applying this license, CERN does not waive         ***
+*** the privileges and immunities granted to it           ***
+*** by virtue of its status as an Intergovernmental       ***
+*** Organization or submit itself to any jurisdiction.    ***
+***                                                       ***
+*** Project website  arcpic.web.cern.ch                   ***
+*** Developers       Helga Timko, Kyrre Sjobak            ***
+*************************************************************
+
+* SCALING PARAMETERS *
+
+Reference density in 1/cm3:		16.0e18
+Reference temperature in eV:		2900.
+Particles in a Debye cube Ndb:		1500.
+
+Number of cells nr, nz:			480 120
+Grid size dz in Debyes:			.5
+Timestep dt in Omega_pe-s:		.2
+
+
+* TIMESTEPS *
+
+Ion timestep dt_ion in dt-s:		5
+Collision timestep ncoll_el in dt:	5
+Collision timestep ncoll_ion in dt:	5
+Stability diagnostics in dt:		1000
+
+Simulation time in O_pe-s:		3000000
+Outputting time dt_out in O_pe-s:	1000.
+Start of averaging in O_pe-s:		1.
+Duration of averaging in O_pe-s:	1.
+
+
+* FIELDS, PARTICLES AND BOUNDARY CONDITIONS *
+
+External dimensionless B_z field:	0.
+External dimensionless B_t field:	0.
+
+- Injection timesteps -
+Injection timestep in dt, electrons:	1
+Injection timestep in dt, neutrals:	5
+Injection timestep in dt, ions:		10
+
+* Particle boundary parameters *
+ArcBoundName: ArcOriginalNewHS
+*** ArcDummy
+///
+*** ArcSimple
+ne_inject       : 10    Number of electrons to inject/timestep
+ni_inject       : 10    Number of ions (type 1, Cu+) to inject/timestep
+nn_inject       : 10    Number of neutrals to inject/timestep
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+file_timestep_hist : 0  How often to write current histograms (0 = normal output steps)
+///
+*** ArcOriginal
+beta            : 35.   Initial Fowler-Nordheim beta of tip
+beta_f          : 2.    Fowler-Nordheim beta of flat surface
+j_melt          : 50.e8 Current density where beta is set equal to beta_f [A/cm^2]
+Remission       : 4.    Radius of injection of FN emitted e- from tip     [dz]
+Remission_theor : 1.    Radius of tip, used for current calc              [dz]
+SEY             : 0.5   Secondary electron yield
+r_Cu_e          : 0.015 Ratio of num. Cu evaporated to electrons FN-emitted
+tipPi           : n     Include the missing PI in the tip area?           [y/n]
+fracInjectStep  : n     Inject electrons at fractional timestep           [y/n]
+alpha_flat      : 1.0   Fractional area of flat surface emitting
+heatspike_thres : 1e7   Threshold for ion current through a cell to trigger heatspike [A/cm^2]
+heatspike_yield : 21352.178106699997 Number of injected Cu neutrals / standard timestep (~1.77 fs) in an heatspike. Default value = 1000 superparticles
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** ArcOriginalNewHS
+beta            : 35.   Initial Fowler-Nordheim beta of tip
+beta_f          : 2.    Fowler-Nordheim beta of flat surface
+j_melt          : 50.e8 Current density where beta is set equal to beta_f [A/cm^2]
+do_erosion      : n     Does neutral evaporation erode the tip, lowering beta? [y/n]
+Remission       : 8.    Radius of injection of FN emitted e- from tip     [dz]
+Remission_theor : 1.1283791670955126 Radius of tip, used for current calc [dz]
+Rborder         : 1.1283791670955126 Where to start flat surface emission               [dz]
+SEY             : 0.5   Secondary electron yield
+r_Cu_e          : 0.015 Ratio of num. Cu evaporated to electrons FN-emitted
+r_Cu_e_flat     : 0.015 Ratio of num. Cu evaporated to electrons FN-emitted from flat surface
+evap_flat_center : n    Evaporate copper from flat surface inside Remission? [y/n]
+fracInjectStep  : y     Inject electrons at fractional timestep           [y/n]
+alpha_flat      : 1.0   Fractional area of flat surface emitting
+heatspike_thres : 1e25  Threshold for ion current through a cell to trigger heatspike [particles/cm^2/s]
+heatspike_YR    : 1     Yield ratio p = (Number of injected Cu neutrals) / (number of impactors) in a heatspike
+heatspike_model : c     How to determine number of impactors and the radius [a/b/c]
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** FlexFN_ring
+alpha_ring      : 1.    Fractional area of emitting ring emitting
+beta_ring       : 35    Fowler-Nordheim beta of these emitters
+idx_ring1       : 2     Lowest mesh node idx (in r) emitting
+idx_ring2       : 2     Highest mesh node idx (in r) emitting
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** FlexFN_twoComp
+alpha1          : 0.1   Alpha for component 1
+alpha2          : 1.0   Alpha for component 2
+beta1           : 35.0  Beta  for component 1
+beta2           : 1.0   Beta  for component 2
+idx1            : 0     Highest mesh node index emitting                  [dr]
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** FlexFN_twoComp_origNeutrals
+alpha1          : 0.1   Alpha for component 1
+alpha2          : 1.0   Alpha for component 2
+beta1           : 35.0  Beta  for component 1
+beta2           : 1.0   Beta  for component 2
+idx1            : 0     Highest mesh node index emitting                  [dr]
+SEY             : 0.5   Secondary electron yield
+r_Cu_e          : 0.015 Ratio of num. Cu evaporated to electrons FN-emitted
+doHeatspike     : y     Enable/disable heatspike sputtering               [y/n]
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** FlexFN2_ring
+ring_alpha      : 1.    Fractional area of emitting ring emitting
+ring_beta       : 35    Fowler-Nordheim beta of these emitters
+ring_r1         : 0.0   Lowest point (in r) emitting                      [dz]
+ring_r2         : 2.0   Highest point (in r) emitting                     [dz]
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** FlexFN2_tableNeutrals
+emitter_radius  : 1.    Radius of emitter [dz]
+emitter_alpha   : 1.0   Fractional area of emitting area emitting
+emitter_beta    : 35    Fowler-Nordheim beta of emitter
+flat_alpha      : 1.0   Fractional area of flat surface emitting
+flat_beta       : 1.0   Fowler-Nordheim beta of flat surface
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** SumTipFNField
+beta_tip        : 35.   Fowler-Nordheim beta of tip
+Remission       : 4.    Radius of injection of FN emitted e- from tip     [dz]
+Remission_theor : 0.56418958354775628 Radius of tip, used for current calc [dz]
+file_timestep   : 1     How often to write to 'arcbounds.dat'             [dt]
+///
+*** END
+
+* Circuit parameters *
+CircuitName: FixedVoltage_resistorCapacitor
+*** FixedVoltage
+U0            : 0.      Ground potential Zmin  [Te]
+UNz           : 2.      Potential at Zmax      [Te]
+file_timestep : 1       How often to write to 'circuit.dat'
+///
+*** FixedVoltage_resistor
+UNz           : 0.6      Supply voltage & initial potential at Zmax [Te]
+Rseries       : 100.0  External series resistance                 [Ohm]
+file_timestep : 1       How often to write to 'circuit.dat'        [dt]
+///
+*** FixedVoltage_resistorCapacitor
+UNz           : 0.6     Supply voltage & initial potential at Zmax [Te]
+Rseries       : 1000.0  External series resistance                 [Ohm]
+Cgap          : 1e-12   Gap capacitance                            [F]
+file_timestep : 1       How often to write to 'circuit.dat'        [dt]
+///
+*** FixedVoltage_ramp
+U0            : 0.     Ground potential Zmin   [Te]
+UNz           : 2.     Potential at Zmax       [Te]
+rampTime      : 0.5e-3 Time to reach full pot. [ns]
+file_timestep : 1      How often to write to 'circuit.dat'
+///
+*** TwoCapacitors
+U0            : 0.      Ground potential Zmin  [Te]
+UNz           : 2.      Potential at Zmax      [Te]
+C_ext         : 0.5e-12 Gap capacitance        [F]
+C_ext2        : 1.e-9   External capacitance   [F]
+R_ext         : 0.      External resistance    [Ohm]
+t_change      : 50.0     When to change from internal to external capacitance [ns]
+avoid_negativ : n       Lock UNz > U0?         [y/n]
+file_timestep : 1       How often to write to 'circuit.dat'
+///
+*** FrequencyExcitation
+FreqGHz       : 12.0    Excitation oscillation frequency [GHz]
+UNz_ampl      : 2.0     Amplitude of excitation
+file_timestep : 1       How often to write to 'circuit.dat'
+///
+*** END of circuit parameters
+
+* Initial particle distribution ('None' is an accepted option) *
+InitialParticleType: None
+*** UniformRestricted
+density       : 1e18    Particle density      [particles/cm^3]
+maxR          : 5.0     Area to fill          [dz]
+maxZ          : 5.0     ---  ""  ---
+minR          : 0.0     ---  ""  ---
+minZ          : 0.0     ---  ""  ---
+doInject_e    : n       Inject electrons?     [y/n]
+doInject_i    : n       Inject ions?          [y/n]
+doInject_n    : y       Inject neutrals?      [y/n]
+Tinj          : 300     Injection temperature [eV]
+///
+*** END of initial particle distribution
+
+
+* OPTIONS *
+(0=yes 1=no)
+
+Outputting particle coordinates:	0
+Outputting electric field:		0
+Outputting VDF:				1
+Magnetic field on:			1
+
+(0 = new run, otherwise use nr of previous run + 1)
+Continue from which run:		0
+
+
+* MISCELLANEOUS *
+
+Ti_over_Te:				.005
+mi_over_me:				1836.15
+Seed for random number generator:	1234
+Field boundary condition BC:            4
+Number of CPUs to use:                  2
+
+
+*** INFO: ***
+
+In case of re-start, only Ndb, dt_out, 
+Remission, Remission_theor,and CONTINUATION 
+are active. Remember to update the no. of run.
+
+
+***********************************************
+
