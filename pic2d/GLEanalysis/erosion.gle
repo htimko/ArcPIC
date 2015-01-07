@@ -1,0 +1,48 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! erosion.gle:
+! Voltage-current characteristic
+
+size 16 12
+set font texcmss 
+
+set lwidth 0.08
+amove 0.3 0.22
+
+begin graph
+        size 15.4 11.56
+        xtitle "Time elapsed [ns]" hei 0.6
+        ytitle "Cathode erosion rate [\mu g/C]" hei 0.6 
+!	y2title "External potential [kV]" rotate hei 0.6 
+        xaxis min 0 hei 0.7 grid
+        yaxis min 0 hei 0.7 grid
+!	y2axis min 0 max 10 hei 0.7 grid
+
+!	xplaces 0 0.5 1 1.5 2 2.5 3
+!	yplaces 0 0.1 0.2 0.3 0.4 0.5
+!        y2places 0 1 2 3 4 5 6 7 8 9 10 
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+
+	data "erosion.dat" d1=c1,c2 !d3=c1,c3 !d1=c1,c4 
+	
+!	key position br
+
+	d1 line lstyle 1 color rgb255(255,140,0) !key "Copper erosion rate" !I_w2
+!	d2 line lstyle 1 color rgb255(220,20,60) key "I, cathode" !I_w1
+!	d1 line y2axis lstyle 1 color rgb255(0,0,139) key "U" !U
+
+end graph
+

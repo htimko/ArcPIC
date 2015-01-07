@@ -1,0 +1,59 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! power.gle:
+! Power consumed by the discharge gap
+
+
+size 16 12
+set font texcmss hei 0.5 
+
+set lwidth 0.08
+amove 0.3 0.22
+
+begin graph
+        size 15.4 11.56
+        xtitle "Time elapsed [ns]" hei 0.6
+        ytitle "Power [kW]" hei 0.6 
+        xaxis min 0 max 3  hei 0.7 grid
+        yaxis min 0 max 10000 hei 0.7 grid
+!        yaxis min 0 max 5000 hei 0.7 grid
+
+	xplaces 0 0.5 1 1.5 2 2.5 3
+	yplaces 0 2000 4000 6000 8000 10000
+	ynames "0" "2" "4" "6" "8" "10"
+!	yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1" "2" "3" "4" "5"
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+
+	data "power.dat" d2=c1,c2 
+	data "charge.dat" d1=c1,c2 
+	
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 line lstyle 1 color rgb255(0,0,139)
+
+
+end graph
+
+	set just cc
+	amove 10 8
+	write "Energy consumed: " 
+	amove 10 7.2	
+	set color rgb255(0,0,139)
+	write "0 J" !write_here
+	amove 10 6.6	
+	set color rgb255(220,20,60)
+	write "0 J" !write_2here
+

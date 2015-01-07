@@ -1,0 +1,46 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! count_e.gle:
+! Particle counts
+
+size 16 12
+set font texcmss 
+
+set lwidth 0.08
+amove 0.3 0.22
+
+begin graph
+        size 15.4 11.56
+        xtitle "Time elapsed [ns]" hei 0.6
+        ytitle "Electron particle count [a.u.]" hei 0.6 
+        xaxis min 0 max 3 hei 0.7 grid
+        yaxis log min 1 max 10000000 hei 0.7 grid
+
+	xplaces 0 0.5 1 1.5 2 2.5 3
+	yplaces 1 1e1 1e2 1e3 1e4 1e5 1e6 1e7
+	ynames "1" "10" "10^2" "10^3" "10^4" "10^5" "10^6" "10^7"
+	xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+
+	data "out_counts.dat" d1=c1,c2 d2=c1,c5 d3=c1,c8 
+	
+	key position tr
+
+	d1 line lstyle 1 color rgb255(0,0,139) key "e^-, w1" 
+	d2 line lstyle 9 color rgb255(0,0,139) key "e^-, w2"
+	d3 line lstyle 2 color rgb255(0,0,139) key "e^-, w3"
+
+end graph
+

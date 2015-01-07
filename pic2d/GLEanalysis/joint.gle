@@ -1,0 +1,258 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! joint.gle:
+! Joint density & potential plots
+
+
+
+size 27 25.2 !33 12
+set font texcmss 
+set lwidth 0.08
+
+
+
+! *** DENSITY ***
+
+amove 0.7 16.2
+begin graph
+        size 13 9
+        ytitle "Number density [1/cm^3]" hei 0.6
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis log min 1e15 max 1e20 hei 0.7 grid
+
+	xplaces 0 5 10 15 20 
+        yplaces 1e15 1e16 1e17 1e18 1e19 1e20
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	x2labels on
+
+	data "ne_c.dat" d1=c1,c2 !electrons
+	data "Cu_c.dat" d2=c1,c2 !neutrals
+	data "Cup_c.dat" d3=c1,c2 !ions
+	d1 line lstyle 1 color rgb255(0,0,139) 
+	d2 line lstyle 1 color rgb255(255,140,0) 
+	d3 line lstyle 1 color rgb255(220,20,60) 
+
+end graph
+
+
+amove 0.7 9.9
+begin graph
+        size 13 9
+        ytitle "Number density [1/cm^3]" hei 0.6
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis log min 1e15 max 1e20 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+        yplaces 1e15 1e16 1e17 1e18 1e19 !1e20
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+
+	data "ne_b.dat" d1=c1,c2 !electrons
+	data "Cu_b.dat" d2=c1,c2 !neutrals
+	data "Cup_b.dat" d3=c1,c2 !ions
+	d1 line lstyle 1 color rgb255(0,0,139) 
+	d2 line lstyle 1 color rgb255(255,140,0) 
+	d3 line lstyle 1 color rgb255(220,20,60) 
+
+end graph
+
+
+amove 0.7 3.6
+begin graph
+        size 13 9
+        xtitle "Distance z from cathode [\mu m]" hei 0.6
+        ytitle "Number density [1/cm^3]" hei 0.6
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis log min 1e15 max 1e20 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+        yplaces 1e15 1e16 1e17 1e18 1e19 !1e20
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+
+	data "ne_a.dat" d1=c1,c2 !electrons
+	data "Cu_a.dat" d2=c1,c2 !neutrals
+	data "Cup_a.dat" d3=c1,c2 !ions
+	d1 line lstyle 1 color rgb255(0,0,139) 
+	d2 line lstyle 1 color rgb255(255,140,0) 
+	d3 line lstyle 1 color rgb255(220,20,60) 
+
+end graph
+
+
+
+
+! *** INFO ***
+
+amove 12.3 19.5
+box 2.4 2.2
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black 
+	write "20 \mu m"  ! grid3
+end origin
+
+
+amove 12.3 13.2
+box 2.4 2.2
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black
+	write "10 \mu m"  ! grid2
+end origin
+
+
+amove 12.3 6.9
+box 2.4 2.2 
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black
+	write "0 \mu m"  ! grid1
+end origin
+
+
+
+! *** POTENTIAL ***
+
+amove  13.3 16.2
+begin graph
+        size 13 9
+        y2title "Potential [kV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 8 hei 0.7 grid 
+
+	xplaces 0 5 10 15 20
+        yplaces 0 1 2 3 4 5 6 7 8 !9 10
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	x2labels on
+	ylabels off
+	y2labels on
+
+	data "phi_c.dat" d1=c1,c2 
+	d1 line lstyle 1 color rgb255(220,20,60) 
+
+end graph
+
+
+amove  13.3 9.9
+begin graph
+        size 13 9
+        y2title "Potential [kV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 8 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20
+        yplaces 0 1 2 3 4 5 6 7 !8 9 10
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	ylabels off
+	y2labels on
+
+	data "phi_b.dat" d1=c1,c2 
+	d1 line lstyle 1 color rgb255(220,20,60)
+
+end graph
+
+
+amove  13.3 3.6
+begin graph
+        size 13 9
+        xtitle "Distance z from cathode [\mu m]" hei 0.6
+        y2title "Potential [kV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 8 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20
+        yplaces 0 1 2 3 4 5 6 7 !8 9 10
+        xticks lstyle 1 lwidth 0.02
+        yticks lstyle 1 lwidth 0.02
+	ysubticks lstyle 1 lwidth 0.01
+
+	ylabels off
+	y2labels on
+
+	data "phi_a.dat" d1=c1,c2 
+	d1 line lstyle 1 color rgb255(220,20,60) 
+
+end graph
+
+
+
+! *** INFO ***
+
+amove 11.7 0.2
+box 3.6 3.6
+begin origin
+        rmove 1.8 0.2
+	set hei 0.6 color black just center
+	write " Time 0.00 ns"
+
+	amove 1. 3.0
+	set hei .5 just left color black
+	write "Species"
+
+	amove 1. 2.4
+	set hei .5 lstyle 1 color rgb255(0,0,139)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "e\tex{$^-$}"
+
+	amove 1. 1.9
+	set hei .5 lstyle 1 color rgb255(255,140,0)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "Cu"
+
+	amove 1. 1.4
+	set hei .5 lstyle 1 color rgb255(220,20,60)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "Cu\tex{$^+$}"
+
+end origin
+
+
+
+
+

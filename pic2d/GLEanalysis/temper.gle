@@ -1,0 +1,293 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! temper.gle:
+! Temperature plots
+
+
+
+size 31.2 25.2 !27 25.2
+set font texcmss 
+set lwidth 0.08
+
+
+
+! *** TEMPERATURE Z-DIR ***
+
+amove 0.7 16.2
+begin graph
+        size 13 9
+        ytitle "T_z, Cu^+ [keV]" hei 0.6
+        y2title "T_z, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid
+	y2axis min 0 max 2500 hei 0.7 grid
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000 2500
+	ynames "0" "0.5" "1" "1.5" "2" "2.5"
+	y2names "0" "0.5" "1" "1.5" "2" "2.5"
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	x2labels on
+	y2labels on
+
+	data "Tiz_c.dat" d1=c1,c2 !ions
+	data "Tez_c.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+amove 0.7 9.9
+begin graph
+        size 13 9
+        ytitle "T_z, Cu^+ [keV]" hei 0.6
+        y2title "T_z, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid nolast
+	y2axis min 0 max 2500 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000 
+	ynames "0" "0.5" "1" "1.5" "2" 
+	y2names "0" "0.5" "1" "1.5" "2" 
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	y2labels on
+
+	data "Tiz_b.dat" d1=c1,c2 !ions
+	data "Tez_b.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+amove 0.7 3.6
+begin graph
+        size 13 9
+        ytitle "T_z, Cu^+ [keV]" hei 0.6
+        y2title "T_z, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid nolast
+	y2axis min 0 max 2500 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000 
+	ynames "0" "0.5" "1" "1.5" "2" 
+	y2names "0" "0.5" "1" "1.5" "2" 
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+	y2labels on
+
+	data "Tiz_a.dat" d1=c1,c2 !ions
+	data "Tez_a.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+
+
+! *** INFO ***
+
+amove 14.4 19.5 !12.3 19.5
+box 2.4 2.2
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black 
+	write "20 \mu m"  ! grid3
+end origin
+
+
+amove 14.4 13.2 !12.3 13.2
+box 2.4 2.2
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black
+	write "10 \mu m"  ! grid2
+end origin
+
+
+amove 14.4 6.9 !12.3 6.9
+box 2.4 2.2 
+begin origin
+	amove 1.2 1.6
+        set hei 0.5 color black just center
+	write "Distance"
+	amove 1.2 1.
+        write "from axis:"
+	amove 1.2 0.4
+        set hei 0.6 color black
+	write "0 \mu m"  ! grid1
+end origin
+
+
+
+! *** POTENTIAL ***
+
+amove  17.5 16.2 !13.3 16.2
+begin graph
+        size 13 9
+        ytitle "T_{tot}, Cu^+ [keV]" hei 0.6
+        y2title "T_{tot}, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid
+	y2axis min 0 max 2500 hei 0.7 grid
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000 2500
+	ynames "0" "0.5" "1" "1.5" "2" "2.5"
+	y2names "0" "0.5" "1" "1.5" "2" "2.5"
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	x2labels on
+	y2labels on
+
+	data "Titot_c.dat" d1=c1,c2 !ions
+	data "Tetot_c.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+amove  17.5 9.9 !13.3 9.9
+begin graph
+        size 13 9
+        size 13 9
+        ytitle "T_{tot}, Cu^+ [keV]" hei 0.6
+        y2title "T_{tot}, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid nolast
+	y2axis min 0 max 2500 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000
+	ynames "0" "0.5" "1" "1.5" "2" 
+	y2names "0" "0.5" "1" "1.5" "2" 
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+        xlabels off
+	y2labels on
+
+	data "Titot_b.dat" d1=c1,c2 !ions
+	data "Tetot_b.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+amove  17.5 3.6 !13.3 3.6
+begin graph
+        size 13 9
+        ytitle "T_{tot}, Cu^+ [keV]" hei 0.6
+        y2title "T_{tot}, e^- [keV]" hei 0.6 rotate
+        xaxis min 0 max 20  hei 0.7 grid
+        yaxis min 0 max 2500 hei 0.7 grid nolast
+	y2axis min 0 max 2500 hei 0.7 grid nolast
+
+	xplaces 0 5 10 15 20 
+!        yplaces 0 1000 2000 3000 4000 5000
+!	ynames "0" "1e3" "2e3" "3e3" "4e3" "5e3"
+        yplaces 0 500 1000 1500 2000
+	ynames "0" "0.5" "1" "1.5" "2" 
+	y2names "0" "0.5" "1" "1.5" "2" 
+        xticks lstyle 1 lwidth 0.02 
+        yticks lstyle 1 lwidth 0.02 
+	ysubticks lstyle 1 lwidth 0.01
+
+	y2labels on
+
+	data "Titot_a.dat" d1=c1,c2 !ions
+	data "Tetot_a.dat" d2=c1,c2 !electrons
+	d1 line lstyle 1 color rgb255(220,20,60)
+	d2 y2axis line lstyle 1 color rgb255(0,0,139)  
+
+end graph
+
+
+
+! *** INFO ***
+
+amove 13.8 0.2 !11.7 0.2
+box 3.6 3.6
+begin origin
+        rmove 1.8 0.2
+	set hei 0.6 color black just center
+	write " Time 0.00 ns"
+
+	amove 1. 3.0
+	set hei .5 just left color black
+	write "Species"
+
+	amove 1. 2.4
+	set hei .5 lstyle 1 color rgb255(0,0,139)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "e\tex{$^-$}"
+
+	amove 1. 1.9
+	set hei .5 lstyle 1 color rgb255(255,140,0)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "Cu"
+
+	amove 1. 1.4
+	set hei .5 lstyle 1 color rgb255(220,20,60)
+	rline 0.9 0 
+	rmove 0.1 -0.1
+	write "Cu\tex{$^+$}"
+
+end origin
+
+
+
+
+

@@ -1,0 +1,107 @@
+!
+! Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+! This software is distributed under the terms of the
+! GNU General Public License version 3 (GPL Version 3),
+! copied verbatim in the file LICENCE.md. In applying this
+! license, CERN does not waive the privileges and immunities granted to it
+! by virtue of its status as an Intergovernmental Organization
+! or submit itself to any jurisdiction.
+!
+! Project website: http://arcpic.web.cern.ch/
+! Developers: Helga Timko, Kyrre Sjobak
+!
+! efield.gle:
+! 2D electric field plots
+
+ 
+
+size 32 16
+set font texcmss 
+
+!set lwidth 0.06
+set lwidth 0.02
+amove 0.3 0.3
+
+
+begin fitz
+   data "ez.dat"
+   x from 0 to 12 step 0.2 ! xz
+   y from 0 to 20 step 0.2 ! yz
+   ncontour 6
+end fitz
+
+begin fitz
+   data "er.dat"
+   x from 0 to 12 step 0.2 ! xr
+   y from 0 to 20 step 0.2 ! yr
+   ncontour 6
+end fitz
+
+
+
+begin object ez
+   begin surface
+      size 16 16
+      data "ez.z"
+      top color red !rgb255(220,20,60) 
+      xaxis min 0 max 12 step 2 hei .35 nolast
+      yaxis min 0 max 20 step 2 hei .35 
+      zaxis min -10.5 max 0.5 step 1 hei .35
+
+      xtitle "Distance r from axis [\mu m]" hei 0.45 
+      ytitle "Distance z from cathode [\mu m]" hei 0.45
+      ztitle "E_z [GV/m]" hei 0.45
+
+      base xstep 2 ystep 2 lstyle 9 
+      back ystep 2 zstep 1 lstyle 9 
+      right xstep 2 zstep 1 lstyle 9 
+      points "ez.dat" 
+      marker circle
+      view 5 0 0.2
+   end surface
+end object
+
+begin object er
+   begin surface
+      size 16 16
+      data "er.z"
+      top color blue !rgb255(255,140,0) 
+      xaxis min 0 max 12 step 2 hei .35 nolast
+      yaxis min 0 max 20 step 2 hei .35 
+      zaxis min -0.5 max 2 step 0.25 hei .35
+
+      xtitle "Distance r from axis [\mu m]" hei 0.45 
+      ytitle "Distance z from cathode [\mu m]" hei 0.45
+      ztitle "E_r [GV/m]" hei 0.45
+
+      base xstep 2 ystep 2 lstyle 9 
+      back ystep 2 zstep 0.25 lstyle 9 
+      right xstep 2 zstep 0.25 lstyle 9 
+      points "er.dat" 
+      marker circle
+      view 5 0 0.2
+   end surface
+end object
+
+
+
+amove pagewidth()/4 pageheight()/2
+draw ez.cc
+
+amove pagewidth()/1.33333 pageheight()/2
+draw er.cc
+
+
+
+
+
+set lwidth 0.03 lstyle 1 color black
+amove 14.5 0.2
+box 3 0.8
+begin origin
+	amove 1.4 0.2
+	set hei 0.4 color black just center
+	write " Time 0.00 ns"
+end origin
+
+

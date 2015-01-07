@@ -1,0 +1,161 @@
+#! /bin/bash
+#
+# Copyright 2010-2015 CERN and Helsinki Institute of Physics.
+# This software is distributed under the terms of the
+# GNU General Public License version 3 (GPL Version 3),
+# copied verbatim in the file LICENCE.md. In applying this
+# license, CERN does not waive the privileges and immunities granted to it
+# by virtue of its status as an Intergovernmental Organization
+# or submit itself to any jurisdiction.
+#
+# Project website: http://arcpic.web.cern.ch/
+# Developers: Helga Timko, Kyrre Sjobak, Lotta Mether
+#
+
+if [ "$#" -ne 5 ] ; then
+    echo "Usage: 2Dpic_joint <mintime> <maxtime> <cross-section NG2> <cross-section NG3> <every nth frame to analyse>" > /dev/stderr
+    echo "Generates joint movies of n and phi for 2D Arc-PIC code. " > /dev/stderr
+    echo "Run in folder run_name/gle " > /dev/stderr
+    echo "Eg. to analyse all frames: 2Dpic_joint 10 200010 2 5 1"
+    exit
+fi
+
+min=$1
+max=$2
+grid2=$3
+grid3=$4
+nth=$5
+
+grid1=0
+
+step1=`head -2 ../out/timeIndex.dat | tail -1 | awk '{print $1}'`
+step2=`head -3 ../out/timeIndex.dat | tail -1 | awk '{print $1}'`
+step=`echo | awk -v step1=$step1 -v step2=$step2 -v nth=$nth '{ printf "%d", step2-step1*nth}'`
+code=`echo | awk -v m=$min '{ printf "%08ld", m}'`
+
+echo "Starting code is $code"
+echo "Timestep is $step"
+
+
+### RESCALING DATA TO DIMENSIONAL VALUES ###
+
+ne=`grep "Reference density in 1/cm3:" ../input.txt | awk '{print $5}'`
+Te=`grep "Reference temperature in eV:" ../input.txt | awk '{print $5}'`
+nr=`grep "Number of cells nr, nz:" ../input.txt | awk '{print $6}'`
+nz=`grep "Number of cells nr, nz:" ../input.txt | awk '{print $7}'`
+dz=`grep "Grid size dz in Debyes:" ../input.txt | awk '{print $6}'`
+dt=`grep "Timestep dt in Omega_pe-s:" ../input.txt | awk '{print $5}'`
+dt_out=`grep "Outputting time dt_out in O_pe-s:" ../input.txt | awk '{print $6}'`
+
+echo "Parameters"
+echo "ne= $ne Te= $Te"
+echo "nr= $nr nz= $nz"
+echo "dz= $dz dt= $dt"
+echo "dt_out= $dt_out"
+
+### *** ###
+
+
+
+# RESCALE GRID TO DIMENSIONLESS DISTANCE
+grd1=`echo | awk -v dz=$dz -v g=$grid1 '{ printf "%.5e", g*dz}'`
+grd2=`echo | awk -v dz=$dz -v g=$grid2 '{ printf "%.5e", g*dz}'`
+grd3=`echo | awk -v dz=$dz -v g=$grid3 '{ printf "%.5e", g*dz}'`
+
+echo "grid1,2,3: $grid1 $grid2 $grid3"
+echo "grd1,2,3: $grd1 $grd2 $grd3 "
+
+
+# WRITING CORRECT DISTANCES INTO GLE
+  head -1 joint.gle | awk -v g1=$grd1 -v n=$ne -v Te=$Te '{Ld=sqrt(552635*Te/n); g1=g1*Ld*10000; printf"%2.1f \n",g1;}' > grid.tmp
+  head -1 joint.gle | awk -v g2=$grd2 -v n=$ne -v Te=$Te '{Ld=sqrt(552635*Te/n); g2=g2*Ld*10000; printf"%2.1f \n",g2;}' >> grid.tmp
+  head -1 joint.gle | awk -v g3=$grd3 -v n=$ne -v Te=$Te '{Ld=sqrt(552635*Te/n); g3=g3*Ld*10000; printf"%2.1f \n",g3;}' >> grid.tmp
+    g1=`head -1 grid.tmp | awk '{print $1}'`
+    g2=`head -2 grid.tmp | tail -1 | awk '{print $1}'`
+    g3=`head -3 grid.tmp | tail -1 | awk '{print $1}'`
+    rm grid.tmp
+    echo "g1,2,3: $g1 $g2 $g3 "
+    
+    # echo "At sed grid"
+    eval "sed -e '/grid1/ c\write \"$g1 um\" ' <joint.gle >joint_tmp.gle "
+    eval "sed -e '/grid2/ c\write \"$g2 um\" ' <joint_tmp.gle >joint_tmp2.gle "
+    eval "sed -e '/grid3/ c\write \"$g3 um\" ' <joint_tmp2.gle >joint_grid.gle "
+    rm joint_tmp.gle joint_tmp2.gle
+
+
+# PRINT OUT TIME (in ns)
+rm time.dat
+cat ../out/timeIndex.dat | awk -v dt=$dt -v ne=$ne '{omega=56414.6*sqrt(ne); t=$1; time=t*dt*1e+9/omega; printf "%08ld %1.2f \n", t, time}' > time.dat 
+
+rm -r pngs/joint
+mkdir pngs/joint
+
+
+
+k=1
+for ((i=$min; i<=$max; i=i+$step)); do
+
+  now_is=`grep "$code" time.dat | awk '{print $2}'`
+  echo "now_is $now_is"
+  echo "code is $code"
+
+### DENSITY ###
+
+    rm ne_a.dat ne_b.dat ne_c.dat Cu_a.dat Cu_b.dat Cu_c.dat Cup_a.dat Cup_b.dat Cup_c.dat
+
+    # create temporary file with rescaled values, given grids in r-dir
+    cat ../out/ne${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd1 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > ne_a.dat
+    cat ../out/ne${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd2 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > ne_b.dat
+    cat ../out/ne${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd3 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > ne_c.dat
+	
+    cat ../out/Cu${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd1 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cu_a.dat
+    cat ../out/Cu${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd2 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cu_b.dat
+    cat ../out/Cu${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd3 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cu_c.dat
+	
+    cat ../out/Cup${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd1 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cup_a.dat
+    cat ../out/Cup${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd2 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cup_b.dat
+    cat ../out/Cup${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd3 '{ Ld=sqrt(552635*Te/n); z=$2; dens=$3; z=z*Ld*10000; dens=dens*n; if($1==g) {printf "%.4f %.6e \n", z,dens;}}' > Cup_c.dat
+
+
+
+### POTENTIAL ###
+    #echo "At phi.dat"
+    rm phi_a.dat phi_b.dat phi_c.dat
+
+    # create temporary file with rescaled values
+    cat ../out/phi${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd1 '{ Ld=sqrt(552635*Te/n); z=$2; phi=$3; z=z*Ld*10000; phi=phi*Te/1000; if($1==g) {printf "%.4f %.6e \n", z,phi;}}' > phi_a.dat	
+    cat ../out/phi${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd2 '{ Ld=sqrt(552635*Te/n); z=$2; phi=$3; z=z*Ld*10000; phi=phi*Te/1000; if($1==g) {printf "%.4f %.6e \n", z,phi;}}' > phi_b.dat
+    cat ../out/phi${code}.dat | awk -v n=$ne -v Te=$Te -v g=$grd3 '{ Ld=sqrt(552635*Te/n); z=$2; phi=$3; z=z*Ld*10000; phi=phi*Te/1000; if($1==g) {printf "%.4f %.6e \n", z,phi;}}' > phi_c.dat
+
+
+
+		
+
+### execute gle, into png or jpg format
+    #echo "At sed time"
+    eval "sed -e '/Time/ c\write \"Time $now_is ns\" ' <joint_grid.gle >joint_tmp.gle "
+
+
+#   gle -d jpg -o joint${k} joint_tmp.gle
+#   mv joint${k}.jpg pngs/joint/.
+
+# HIGH RESOLUTION/LOW RESOLUTION
+#   gle -d png -dpi 300 -o joint${k} joint_tmp.gle
+    kk=`echo | awk -v k=$k '{ printf "%03ld", k}'`
+    gle -d png -o joint${kk} joint_tmp.gle
+    mv joint${kk}.png pngs/joint/.
+
+    rm joint_tmp.gle
+
+  k=`echo $(($k+1))`
+  code=`echo | awk -v i=$i -v s=$step '{x=i+s; printf "%08ld", x;}'`
+  echo " "
+		
+
+
+done
+
+#rm joint_grid.gle
+ffmpeg -sameq -r 20 -f image2 -i pngs/joint/joint%03d.png  pngs/joint/movie_joint.mpg
+
+echo "Done with analysis!"
