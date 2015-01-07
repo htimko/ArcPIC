@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2010-2014 CERN and Helsinki Institute of Physics.
+# Copyright 2010-2015 CERN and Helsinki Institute of Physics.
 # This software is distributed under the terms of the
 # GNU General Public License version 3 (GPL Version 3),
 # copied verbatim in the file LICENCE.md. In applying this

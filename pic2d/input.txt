@@ -1,6 +1,6 @@
 *************************************************************
 ***            INPUT FILE FOR 2D ARC-PIC CODE             ***
-*** (C) CERN and Helsinki Institute of Physics, 2010-2014 ***
+*** (C) CERN and Helsinki Institute of Physics, 2010-2015 ***
 ***                                                       ***
 *** This software is distributed under the terms of the   ***
 *** GNU General Public License version 3 (GPL Version 3), ***
