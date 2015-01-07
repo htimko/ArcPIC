@@ -73,23 +73,28 @@ for line in mkfile:
 mkfile.close()
 mkfile2.close()
 
-#Make a SVN status log
-#print "Making SVN status log..."
-#svnlog = open(os.path.join(newpath, "SVNstatus.txt"), 'w');
-#svnlog.write("SVN log created by makerundir at " + str(datetime.datetime.now()) + "\n")
-#svnlog.write("Output from 'svn info':\n")
-#svnlog.write("#########################################\n")
-#svnlog.flush()
-#subprocess.call(["svn", "info"], stdout=svnlog, stderr=subprocess.STDOUT)
-#svnlog.write("Output from 'svnversion':\n")
-#svnlog.write("#########################################\n")
-#svnlog.flush()
-#subprocess.call(["svnversion"], stdout=svnlog, stderr=subprocess.STDOUT)
-#svnlog.write("#########################################\n")
-#svnlog.write("Output from 'svn diff':\n")
-#svnlog.write("#########################################\n")
-#svnlog.flush()
-#subprocess.call(["svn", "diff"], stdout=svnlog, stderr=subprocess.STDOUT)
-#svnlog.write("#########################################\n")
+#Make a GIT status log
+print "Making GIT status log..."
+gitlog = open(os.path.join(newpath, "GITstatus.txt"), 'w');
+gitlog.write("GIT log created by makerundir at " + str(datetime.datetime.now()) + "\n")
+gitlog.write("\n\n")
+
+gitlog.write("Output from 'git log -n 1':\n")
+gitlog.write("#########################################\n")
+gitlog.flush()
+subprocess.call(["git", "log", "-n", "1"], stdout=gitlog, stderr=subprocess.STDOUT)
+gitlog.write("\n\n")
+
+gitlog.write("Output from 'git status':\n")
+gitlog.write("#########################################\n")
+gitlog.flush()
+subprocess.call(["git", "status"], stdout=gitlog, stderr=subprocess.STDOUT)
+gitlog.write("\n\n")
+
+gitlog.write("Output from 'git diff':\n")
+gitlog.write("#########################################\n")
+gitlog.flush()
+subprocess.call(["git", "diff"], stdout=gitlog, stderr=subprocess.STDOUT)
+gitlog.write("\n\n")
 
 print "Installed ArcPic in \"" + newpath + "\""
