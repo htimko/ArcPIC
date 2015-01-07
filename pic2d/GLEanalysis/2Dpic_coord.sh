@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 3 ] ; then
-    echo "Usage: 2Dpic_coord <mintime> <maxtime> <every nth frame to analyse>" > /dev/stderr
+    echo "Usage: 2Dpic_coord.sh <mintime> <maxtime> <every nth frame to analyse>" > /dev/stderr
     echo "Generates particle movies for 2D Arc-PIC code. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. to analyse all frames: 2Dpic_coord 10 200010 1"
+    echo "Eg. to analyse all frames: 2Dpic_coord.sh 10 200010 1"
     exit
 fi
 

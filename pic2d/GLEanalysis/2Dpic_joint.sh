@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 5 ] ; then
-    echo "Usage: 2Dpic_joint <mintime> <maxtime> <cross-section NG2> <cross-section NG3> <every nth frame to analyse>" > /dev/stderr
+    echo "Usage: 2Dpic_joint.sh <mintime> <maxtime> <cross-section NG2> <cross-section NG3> <every nth frame to analyse>" > /dev/stderr
     echo "Generates joint movies of n and phi for 2D Arc-PIC code. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. to analyse all frames: 2Dpic_joint 10 200010 2 5 1"
+    echo "Eg. to analyse all frames: 2Dpic_joint.sh 10 200010 2 5 1"
     exit
 fi
 

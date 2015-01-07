@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 4 ] ; then
-    echo "Usage: 2Dpic_efield <mintime> <maxtime> <plotting step in um> <every nth frame to analyse>" > /dev/stderr
-    echo "Generates joint movies of 2D E-field for 2D Arc-PIC code. " > /dev/stderr
+    echo "Usage: 2Dpic_pot.sh <mintime> <maxtime> <plotting step in um> <every nth frame to analyse>" > /dev/stderr
+    echo "Generates joint movies of 2D potentials for 2D Arc-PIC code. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. to analyse all frames: 2Dpic_efield 10 200010 1"
+    echo "Eg. to analyse all frames: 2Dpic_pot.sh 10 200010 0.5 1"
     exit
 fi
 
@@ -62,19 +62,17 @@ Lz=`head -1 grid.tmp | awk '{print $2}'`
 Lr=`head -1 grid.tmp | awk '{print $3}'`
 echo "For fitting: del= $del Lz= $Lz Lr= $Lr"
 
-eval "sed -e '/ xz/ c\x from 0 to $Lr step $pstep ' <efield.gle >efield_tmp1.gle "
-eval "sed -e '/ yz/ c\y from 0 to $Lz step $pstep ' <efield_tmp1.gle >efield_tmp2.gle "
-eval "sed -e '/ xr/ c\x from 0 to $Lr step $pstep ' <efield_tmp2.gle >efield_tmp3.gle "
-eval "sed -e '/ yr/ c\y from 0 to $Lz step $pstep ' <efield_tmp3.gle >efield_grid.gle "
-rm efield_tmp*.gle grid.tmp
+eval "sed -e '/x from/ c\x from 0 to $Lr step $pstep ' <potential.gle >potential_tmp.gle "
+eval "sed -e '/y from/ c\y from 0 to $Lz step $pstep ' <potential_tmp.gle >potential_grid.gle "
+rm potential_tmp.gle grid.tmp
 
 
 # PRINT OUT TIME (in ns)
 rm time.dat
 cat ../out/timeIndex.dat | awk -v dt=$dt -v ne=$ne '{omega=56414.6*sqrt(ne); t=$1; time=t*dt*1e+9/omega; printf "%08ld %1.2f \n", t, time}' > time.dat 
 
-rm -r pngs/efield
-mkdir pngs/efield
+rm -r pngs/pot
+mkdir pngs/pot
 
 
 
@@ -86,24 +84,23 @@ for ((i=$min; i<=$max; i=i+$step)); do
   echo "code is $code"
 
 
-### EFIELD ###
-    rm ez.dat er.dat
+### POTENTIAL ###
+    rm phi_2D.dat 
 
-    # create temporary file with rescaled values, output in GV/m
-    cat ../out/Ez${code}.dat | awk -v n=$ne -v Te=$Te '{ Ld=sqrt(552635*Te/n); r=$1; z=$2; ez=$3; r=r*Ld*10000; z=z*Ld*10000; ez=ez*1e-7*Te/Ld; {printf "%.4f %.4f %.6e \n", r,z,ez;}}' > ez.dat	
-    cat ../out/Er${code}.dat | awk -v n=$ne -v Te=$Te '{ Ld=sqrt(552635*Te/n); r=$1; z=$2; er=$3; r=r*Ld*10000; z=z*Ld*10000; er=er*1e-7*Te/Ld; {printf "%.4f %.4f %.6e \n", r,z,er;}}' > er.dat
-
+    # create temporary file with rescaled values
+    cat ../out/phi${code}.dat | awk -v n=$ne -v Te=$Te '{ Ld=sqrt(552635*Te/n); r=$1; z=$2; phi=$3; r=r*Ld*10000; z=z*Ld*10000; phi=phi*Te/1000; {printf "%.4f %.4f %.6e \n", r,z,phi;}}' > phi_2D.dat	
+	
 
     # execute gle, into png or jpg format
-    eval "sed -e '/Time/ c\write \"Time $now_is ns\" ' <efield_grid.gle >efield_tmp.gle "
+    eval "sed -e '/Time/ c\write \"Time $now_is ns\" ' <potential_grid.gle >potential_tmp.gle "
 
     # HIGH RESOLUTION/LOW RESOLUTION
-    #   gle -d png -dpi 300 -o joint${k} joint_tmp.gle
+    # gle -d png -dpi 300 -o joint${k} joint_tmp.gle
     kk=`echo | awk -v k=$k '{ printf "%03ld", k}'`
-    gle -d png -o efield${kk} efield_tmp.gle
-    mv efield${kk}.png pngs/efield/.
+    gle -d png -dpi 100 -o potential${kk} potential_tmp.gle
+    mv potential${kk}.png pngs/pot/.
 
-    rm efield_tmp.gle
+    rm potential_tmp.gle 
 
   k=`echo $(($k+1))`
   code=`echo | awk -v i=$i -v s=$step '{x=i+s; printf "%08ld", x;}'`
@@ -112,8 +109,8 @@ for ((i=$min; i<=$max; i=i+$step)); do
 
 
 done
-#rm ez.dat er.dat ez.z er.z efield_grid.gle
+rm phi_2D.dat phi_2D.z potential_grid.gle
 
-ffmpeg -sameq -r 20 -f image2 -i pngs/efield/efield%03d.png  pngs/efield/movie_efield.mpg
+ffmpeg -sameq -r 20 -f image2 -i pngs/pot/potential%03d.png  pngs/pot/movie_potential.mpg
 
 echo "Done with analysis!"

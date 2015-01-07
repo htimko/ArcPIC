@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 5 ] ; then
-    echo "Usage: 2Dpic_temper <mintime> <maxtime> <cross-section NG2> <cross-section NG3> <every nth frame to analyse>" > /dev/stderr
+    echo "Usage: 2Dpic_temper.sh <mintime> <maxtime> <cross-section NG2> <cross-section NG3> <every nth frame to analyse>" > /dev/stderr
     echo "Generates joint movies of T for 2D Arc-PIC code. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. to analyse all frames: 2Dpic_temper 10 200010 2 5 1"
+    echo "Eg. to analyse all frames: 2Dpic_temper.sh 10 200010 2 5 1"
     exit
 fi
 

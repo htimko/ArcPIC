@@ -42,13 +42,17 @@ shutil.copy("calcScaling.py", os.path.join(newpath,"calcScaling.py"))
 def ignoFunc(src,dirlist):
     rl = []
     for l in dirlist:
-        if not (l.endswith(".cpp") or l.endswith(".h") or l.endswith(".py") or l.endswith(".dat")):
+        if not (l.endswith(".cpp") or l.endswith(".h") or l.endswith(".py") or \
+                l.endswith(".dat") or l.endswith(".gle") or l.endswith(".sh")):
             rl.append(l);
     return rl
 shutil.copytree("h", os.path.join(newpath,"h"), ignore=ignoFunc)
 shutil.copytree("src", os.path.join(newpath,"src"), ignore=ignoFunc)
 shutil.copytree("tests", os.path.join(newpath,"tests"), ignore=ignoFunc)
 shutil.copytree("inputdata", os.path.join(newpath,"inputdata"), ignore=ignoFunc)
+shutil.copytree("GLEanalysis", os.path.join(newpath,"GLEanalysis"), ignore=ignoFunc)
+os.mkdir(os.path.join(newpath, "GLEanalysis", "pngs"))
+
 
 print "Modifying the Makefile with new $RUNNAME and $WORK..."
 mkfile = open("src/Makefile",'r')
@@ -68,45 +72,6 @@ for line in mkfile:
     mkfile2.write(l);
 mkfile.close()
 mkfile2.close()
-
-print "Installing GLE analysis scripts..."
-SVNbasedir = os.path.join("..","..") #Change this if using a branch! (should in principle be deductible from 'svn info' output)
-anaScriptsFolder = os.path.join(SVNbasedir, "analysis", "pic2d", "trunk")
-anaSupportFolder = os.path.join(SVNbasedir, "support", "analysis", "pic2d", "gle_template_redblue", "trunk")
-os.mkdir(os.path.join(newpath, "GLEanalysis"))
-
-def copyFolderContents(srcFolder, targetFolder):
-    "Adapted from shutil.copytree"
-    names = os.listdir(srcFolder)
-    for name in names:
-        srcname = os.path.join(srcFolder, name)
-        targetname = os.path.join(targetFolder, name)
-        if os.path.isdir(srcname):
-            if name == ".svn":
-                continue #Skip these
-            #Makes directory and copys the stuff
-            shutil.copytree(srcname,targetname)
-        else:
-            shutil.copy2(srcname,targetname)
-
-# COMMENT OUT FOR NOW
-# copyFolderContents(anaScriptsFolder, os.path.join(newpath, "GLEanalysis"))
-
-#Chmod every file which has a hasbang to u+x
-for name in os.listdir(os.path.join(newpath, "GLEanalysis")):
-    fn = os.path.join(newpath, "GLEanalysis",name)
-    if not os.path.isfile(fn):
-        continue
-    
-    fno = open(fn,'r');
-    fnoline = fno.readline();
-    fno.close()
-    if not fnoline.startswith("#!"):
-        continue
-
-    os.chmod(fn, os.stat(fn).st_mode | stat.S_IXUSR)
-
-#copyFolderContents(anaSupportFolder, os.path.join(newpath, "GLEanalysis"))
 
 #Make a SVN status log
 #print "Making SVN status log..."

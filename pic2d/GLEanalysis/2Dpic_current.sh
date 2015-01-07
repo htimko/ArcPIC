@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 1 ] ; then
-    echo "Usage: 2Dpic_current <ionsteps>" > /dev/stderr
+    echo "Usage: 2Dpic_current.sh <ionsteps>" > /dev/stderr
     echo "Generates current flow plots for 2D Arc-PIC code. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. 2Dpic_current 5000"
+    echo "Eg. 2Dpic_current.sh 5000"
     exit
 fi
 

@@ -13,10 +13,10 @@
 #
 
 if [ "$#" -ne 0 ] ; then
-    echo "Usage: 2Dpic_restart " > /dev/stderr
+    echo "Usage: 2Dpic_restart.sh" > /dev/stderr
     echo "Generates total current for restarted 2D Arc-PIC runs. " > /dev/stderr
     echo "Run in folder run_name/gle " > /dev/stderr
-    echo "Eg. 2Dpic_restart"
+    echo "Eg. 2Dpic_restart.sh"
     exit
 fi
 
