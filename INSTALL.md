@@ -25,11 +25,11 @@ Building 2D ArcPIC
 ------------------
 
 Once 2D ArcPIC has been downloaded, enter the pic2d sub-folder. Here, after editing whatever is needed of the source code (src,h and GLEanalysis sub-folders), run the installation script makeRundir.py with the desired installation path as its only argument, i.e. something like `./makerundir /home/scratchdir/arcpic/run123-parameterABC-456`.
-Then edit input.txt and h/dim.h as needed.
+Then edit `input.txt` and `h/dim.h` as needed.
 
 Before compiling, enter the src sub-directory and edit the Makefile such that it points to the right SuperLU and BLAS directories. As an example, to use SuperLU installed in `$(HOME)/codes/arcpic/support/pic2d/trunk/SuperLU_4.2`, the variable `SuperLUroot` should be set to `$(HOME)/codes/arcpic/support/pic2d/trunk/SuperLU_4.2/src`. Further, for ATLAS in `$(HOME)/codes/arcpic/support/pic2d/trunk/ATLAS-3.10.0/`, the variable `ATLASroot` should be set to `$(HOME)/codes/arcpic/support/pic2d/trunk/ATLAS-3.10.0/ATLAS` and `BLASlib` to `-L$(ATLASroot)/lib -lf77blas -latlas`. More examples are provided in the Makefile.
 
-To finish the setup of the Makefile, run the command `make d`, which runs 'gccmakedep'. This scans the source files and automatically adds the necessary targets below the line "#DO NOT DELETE".
+To finish the setup of the Makefile, run the command `make d`, which runs `gccmakedep`. This scans the source files and automatically adds the necessary targets below the line "#DO NOT DELETE".
 
 The program can then be compiled using the command `make e`, which compiles and links. A few warnings due to `#warning <message>` preprocessor commands are to be expected.
 
